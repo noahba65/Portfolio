@@ -1,7 +1,7 @@
 ---
 title: "Assesing Demand for Transit Accessesible Apartments in Chicago"
 author: "Noah Anderson"
-output: html_document
+output: pdf_document
 ---
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 
@@ -74,15 +74,13 @@ cook19 <-
 ```
 
 # Wrangling Transit Data and Setting Boundaries
-The extracted ACS data pertains to the entirety of Cook County, necessitating an initial step to restrict the tracts solely to the City of Chicago. To accomplish this, the chunk presented below imports a geojson shapefile of Chicago Neighborhood boundaries from the official website of the City of Chicago, data.cityofchicago.org. Following several transformations, this shapefile can be utilized to limit the ACS data from the entire Cook County area to solely the City of Chicago.
+The extracted ACS data pertains to the entirety of Cook County, necessitating an initial step to restrict the tracts solely to the City of Chicago. To accomplish this, the chunk presented below imports a geojson shapefile of Chicago boundary  from the official website of the City of Chicago, data.cityofchicago.org. Following several transformations, this shapefile can be utilized to limit the ACS data from the entire Cook County area to solely the City of Chicago.
 ```{r message=FALSE, warning=FALSE}
-chicago_neighborhoods <- st_read("https://raw.githubusercontent.com/noahba65/Portfolio/main/Chicago-TOD/Data/cta_entrances.geojson") %>%
+chicago_boundary <- st_read("https://raw.githubusercontent.com/noahba65/Portfolio/main/Chicago-TOD/Data/chicago_city_boundary.geojson") %>%
   st_transform('ESRI:102728') %>% st_sf()
 
 
-# Erases internal boundaries between neighborhoods to create a Chicago boundary
-chicago_boundary <- st_union(chicago_neighborhoods) %>% 
-  st_sf()
+
 
 # Creating Chicago only ACS tract data for 2009 and 2019 using the st_intersection funciton to only select data and geometries within the Chicago boundary. 
 chicago09 <- st_intersection(chicago_boundary, cook09)
